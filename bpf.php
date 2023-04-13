@@ -20,8 +20,9 @@
  * Include the autoloader
  */
 add_action('plugins_loaded', function () {
-    if (file_exists(__DIR__ . '/vendor/autoload.php')) {
-        include __DIR__ . '/vendor/autoload.php';
+    $autoloader = __DIR__ . '/vendor/autoload.php';
+    if (file_exists($autoloader)) {
+        include $autoloader;
     }
 }, 1);
 
