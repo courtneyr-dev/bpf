@@ -1,0 +1,29 @@
+{
+    "slug": "bpf",
+    "pluginId": 446,
+    "buildId": 481,
+    "entryPoints": {
+        "adminPages": [],
+        "blocks": []
+    },
+    "buildIncludes": [
+        "bpf.php",
+        "readme.txt",
+        "php",
+        "vendor",
+        "build",
+        "inc"
+    ],
+    "buildSteps": {
+        "dev": [
+            "composer install",
+            "yarn",
+            "yarn start"
+        ],
+        "prod": [
+            "composer install --no-dev --prefer-dist -o",
+            "yarn",
+            "yarn build"
+        ]
+    }
+}

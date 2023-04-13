@@ -1,0 +1,69 @@
+name: WordPress Tests
+
+# Run on push
+on:
+  push:
+    # any branch
+    branches:
+      - '*'
+      # If files matching these patterns have changed
+    paths:
+      - 'composer.json'
+      - '**.php'
+      - readme.txt
+      - .github/workflows/wordpress.yml
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # PHP Versions to test
+        php-version: [ "7.4"]
+        # WordPress versions to test
+        wp-version: [ "latest", "6.0", "5.9" ]
+      # Allow all tests to run, even if one fails
+      ## https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstrategyfail-fast
+      fail-fast: false
+
+    steps:
+
+      # Set up plugin
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Docker Compose Version
+        run: docker-compose -v
+
+      ## PHP
+      - name: Install PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: ${{ matrix.php-version }}
+      - name: PHP Version
+        run: php -v
+
+      ## Composer install with caching
+      - name: Get Composer Cache Directory
+        id: get-composer-cache-dir # Instead of composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-${{ matrix.php-version }}-
+
+      - name: Install dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install --prefer-dist --no-progress
+
+      # Run integration tests
+      - name: Tests
+        env:
+          WORDPRESS_VERSION: ${{ matrix.wp-version }}
+          PHP_IMAGE_TAG: ${{ matrix.php-version }}
+        run: docker-compose run phpunit phpunit --config=./phpunit-integration.xml
