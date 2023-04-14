@@ -15,7 +15,7 @@ jobs:
       # Build, Zip and Upload Plugin
       - name: Zip Plugin
         id: pluginmachine
-        uses: imaginary-machines/builder-action@main
+        uses: bpf/builder-action@main
         with:
           PLUGIN_MACHINE_TOKEN:  ${{ secrets.PLUGIN_MACHINE_TOKEN }}
           PLUGIN_DIR: ${{ github.workspace }}
