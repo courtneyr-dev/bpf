@@ -17,7 +17,7 @@
     "devDependencies": {
         "@babel/core": "^7",
         "@testing-library/react": "^12",
-        "@wordpress/scripts": "^21.0.2"
+        "@wordpress/scripts": "^26.2.0"
     },
     "dependencies": {
         "@wordpress/components": "^19.4.0",
