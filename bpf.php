@@ -57,3 +57,46 @@ while (have_posts()) {
     $post_format = get_post_format() ?: 'standard';
     get_template_part('content', $post_format);
 }
+
+add_filter('the_title', 'add_post_format_emoji', 10, 2);
+
+//add emoji to post format
+function add_post_format_emoji($title, $id)
+{
+    // Get the post format for the current post
+    $post_format = get_post_format($id);
+
+    // Add a corresponding emoji based on the post format
+    switch ($post_format) {
+        case 'aside':
+            $emoji = '📝';
+            break;
+        case 'gallery':
+            $emoji = '🖼️';
+            break;
+        case 'link':
+            $emoji = '🔗';
+            break;
+        case 'image':
+            $emoji = '📷';
+            break;
+        case 'quote':
+            $emoji = '❤️';
+            break;
+        case 'status':
+            $emoji = '💬';
+            break;
+        case 'video':
+            $emoji = '📹';
+            break;
+        case 'audio':
+            $emoji = '🎧';
+            break;
+        default:
+            $emoji = '';
+            break;
+    }
+
+    // Return the modified title
+    return $emoji . ' ' . $title;
+}
