@@ -58,3 +58,4 @@ function add_post_format_emoji($title, $id)
     // Return the modified title
     return $emoji . ' ' . $title;
 }
+    
