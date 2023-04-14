@@ -1,0 +1,23 @@
+
+name: Build and ZIP
+on:
+  pull_request:
+    types: [opened, synchronize]
+jobs:
+  make_zip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        #Use Node 16
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      # Build, Zip and Upload Plugin
+      - name: Zip Plugin
+        id: pluginmachine
+        uses: imaginary-machines/builder-action@main
+        with:
+          PLUGIN_MACHINE_TOKEN:  ${{ secrets.PLUGIN_MACHINE_TOKEN }}
+          PLUGIN_DIR: ${{ github.workspace }}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          COMMENT_PR: true
